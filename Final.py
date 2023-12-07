@@ -12,18 +12,16 @@ Tank - 70 health (advantage) 20 armor(5 more than others) giga hammer ( max dama
 The tank is slow so his hit chance is lower because the monster can dodge
 Monster(S) have a starting health of 40 and it preogress by 5 each dungeon(round)
 every 3 monsters defeated. you get the option of choose regenerating of health, shield, or an increase of damage
-(If i have time) make the monsters names random from a list of 50
+(If I have time) make the monsters' names random from a list of 50
 
 Allow input to give your character a name that will be presented throughout the game
-If theres a way make an end screen, make colored text, give weapons names.
-ALso give an option to block with a small chance of dealing reflecting damage.
+If there's a way make an end screen, make colored text, give weapons names.
+Also give an option to block with a small chance of dealing reflecting damage.
 
 EDITED 12/05/23
-... I made several changes along the way and it  was to balance everything and add a few small details into this project.
-The health,armor, and damage is all changed to help balance the game along with progressive upgrades.
+... I made several changes along the way and it was to balance everything and add a few small details into this project.
+The health, armor, and damage are all changed to help balance the game along with progressive upgrades.
 """
-
-
 
 import random
 
@@ -100,6 +98,14 @@ class Monster(Character):
         self.maxDamage = maxDamage
         self.armor = armor
 
+class God(Character):
+    def __init__(self, name="", hitPoints=1000000, hitChance=1000000, maxDamage=10000000, armor=0):
+        self.name = name
+        self.hitPoints = hitPoints
+        self.hitChance = hitChance
+        self.maxDamage = maxDamage
+        self.armor = armor
+
 def printHeroStats(hero):
     print("Hero Stats:")
     hero.printStats()
@@ -148,8 +154,9 @@ def main():
     power_up_choices = ["1", "2", "3"]
     next_monster_health_increase = 0
     next_monster_damage_increase = 0
+    cumulative_armor_upgrade = 0
     
-    words = ["Select a hero to begin", "press 1 for Knight", "press 2 for Ninja", "press 3 for Tank"]
+    words = ["Select a hero to begin", "press 1 for Knight", "press 2 for Ninja", "press 3 for Tank", "To be silly press 4 for God"]
     [print(word) for word in words]
 
     choice = input("Enter your choice: ")
@@ -160,6 +167,8 @@ def main():
         hero = Ninja()
     elif choice == "3":
         hero = Tank()
+    elif choice == "4":
+        hero = God()
     else:
         print("Invalid choice. Exiting.")
         return
@@ -168,7 +177,7 @@ def main():
 
     while True:
         monster = Monster()
-        monster.name = "Monster"
+        monster.name = "Glabglobgabgalab"
         monster.hitPoints += next_monster_health_increase
         monster.maxDamage += next_monster_damage_increase
         
@@ -179,17 +188,18 @@ def main():
         if hero.hitPoints > 0:
             if round_count == power_up_round * 1:  
                 print(f"Power-up Round {power_up_round}")
-                decide = input(f"{hero.name}, would you like regenerating health (1), increased armor (2), or a strength spell (3)? ")
+                decide = input(f"{hero.name}, would you like a health boost (1), increased armor (2), or a strength spell (3)? ")
 
                 while decide not in power_up_choices:
                     print("Invalid choice. Please enter 1, 2, or 3.")
-                    decide = input(f"{hero.name}, would you like regenerating health (1), increased armor (2), or a strength spell (3)? ")
+                    decide = input(f"{hero.name}, would you like a health boost (1), increased armor (2), or a strength spell (3)? ")
 
                 if decide == "1":
-                    hero.hitPoints += 80
+                    hero.hitPoints += 70
 
                 elif decide == "2":
-                    hero.armor += 13
+                    cumulative_armor_upgrade += 25  
+                    hero.armor += cumulative_armor_upgrade
 
                 elif decide == "3":
                     hero.maxDamage += 9
@@ -199,11 +209,14 @@ def main():
                 
                 power_up_round += 1
 
+            
+            hero.armor += 5
+
             round_count += 1
 
         else:
-            restart_option = input("Game over. Do you want to restart? (yes/no): ")
-            if restart_option.lower() == "yes":
+            restart_option = input("Game over. Do you want to restart? (y/n): ")
+            if restart_option.lower() == "y":
                 restart_game()
             else:
                 print("Exiting the game.")
@@ -211,4 +224,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-       
